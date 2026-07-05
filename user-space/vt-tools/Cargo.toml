@@ -1,0 +1,37 @@
+[package]
+name = "vt-tools"
+version = "0.1.0"
+edition = "2021"
+license = "GPL-3.0-only"
+
+[dependencies]
+vt-core = { path = "../vt-core" }
+libc = "0.2"
+
+[[bin]]
+name = "chvt"
+path = "src/bin/chvt.rs"
+
+[[bin]]
+name = "fgconsole"
+path = "src/bin/fgconsole.rs"
+
+[[bin]]
+name = "deallocvt"
+path = "src/bin/deallocvt.rs"
+
+[[bin]]
+name = "openvt"
+path = "src/bin/openvt.rs"
+
+[[bin]]
+name = "setfont"
+path = "src/bin/setfont.rs"
+
+[[bin]]
+name = "loadkeys"
+path = "src/bin/loadkeys.rs"
+
+[[bin]]
+name = "rusted-vconsole-setup"
+path = "src/bin/vconsole-setup.rs"

@@ -1,0 +1,7 @@
+[workspace]
+resolver = "2"
+members = [
+    "vt-core",
+    "vt-tools",
+    "vt-manager",
+]

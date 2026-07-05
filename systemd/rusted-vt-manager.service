@@ -1,0 +1,19 @@
+[Unit]
+Description=Rusted-Linux VT Manager Daemon
+Documentation=man:vt(4) man:vconsole.conf(5)
+Wants=systemd-logind.service
+After=systemd-logind.service
+Before=getty.target
+
+[Service]
+Type=notify
+ExecStart=/usr/bin/rusted-vt-manager
+NotifyAccess=main
+WatchdogSec=90
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

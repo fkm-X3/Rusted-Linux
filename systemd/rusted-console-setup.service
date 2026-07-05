@@ -1,0 +1,18 @@
+[Unit]
+Description=Rusted-Linux Console Font and Keymap Setup
+Documentation=man:vconsole.conf(5)
+DefaultDependencies=no
+Wants=systemd-udevd.service
+After=systemd-udevd.service
+Before=local-fs.target
+ConditionVirtualization=!container
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/rusted-vconsole-setup
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=sysinit.target
