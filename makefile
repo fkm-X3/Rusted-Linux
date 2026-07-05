@@ -5,7 +5,11 @@ OUT_DIR      = ./build
 SYSROOT      = $(OUT_DIR)/rootfs
 SYSTEMD_DIR  = ./systemd
 
-.PHONY: all kernel userspace image vt-install vt-uninstall clean
+# WSL build support (for building Linux binaries from Windows)
+WSL_DISTRO  ?= Ubuntu-24.04
+
+.PHONY: all kernel userspace image vt-install vt-uninstall clean \
+        wsl wsl-kernel wsl-userspace wsl-image wsl-vt-install wsl-clean
 
 all: image
 
@@ -13,6 +17,7 @@ all: image
 kernel:
 	@echo "Binding distro config to Linux 7.1 source..."
 	cp $(DISTRO_DIR)/kernel-config $(KERNEL_SRC)/.config
+	$(MAKE) -C $(KERNEL_SRC) olddefconfig
 	$(MAKE) -C $(KERNEL_SRC) -j$$(nproc) bzImage
 
 # Build the Rust userspace (VT core, tools, and manager)
@@ -75,3 +80,27 @@ vt-uninstall:
 clean:
 	cd user-space && cargo clean
 	rm -rf $(OUT_DIR)
+
+
+# WSL alt builds
+
+wsl-deps:
+	wsl.exe -d $(WSL_DISTRO) --cd "$(CURDIR)" bash scripts/install-deps.sh
+
+wsl:
+	wsl.exe -d $(WSL_DISTRO) --cd "$(CURDIR)" make
+
+wsl-kernel:
+	wsl.exe -d $(WSL_DISTRO) --cd "$(CURDIR)" make kernel
+
+wsl-userspace:
+	wsl.exe -d $(WSL_DISTRO) --cd "$(CURDIR)" make userspace
+
+wsl-image:
+	wsl.exe -d $(WSL_DISTRO) --cd "$(CURDIR)" make image
+
+wsl-vt-install:
+	wsl.exe -d $(WSL_DISTRO) --cd "$(CURDIR)" make vt-install
+
+wsl-clean:
+	wsl.exe -d $(WSL_DISTRO) --cd "$(CURDIR)" make clean
